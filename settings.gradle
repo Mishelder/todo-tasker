@@ -1,0 +1,4 @@
+rootProject.name = 'todo-tasker'
+include 'rest-api'
+include 'webapp'
+
