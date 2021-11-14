@@ -43,6 +43,22 @@ changeMoveableRange(currentFrom, currentTo);
 
 const allTasks = {};
 
+function getCookie(name) {
+  let nameEQ = name + "=";
+  let ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) {
+      return parseInt(
+          c.substring(nameEQ.length, c.length), 10);
+    }
+  }
+  return null;
+}
+
 //Server
 
 async function getTasks(from, to) {
@@ -64,6 +80,7 @@ function saveTask(date, inputElement, taskDiv) {
     },
     body: JSON.stringify(
         {
+          'clientId': getCookie('clientId'),
           'taskName': inputElement.value,
           'date': date,
           'done': inputElement.classList.contains('is_done'),
