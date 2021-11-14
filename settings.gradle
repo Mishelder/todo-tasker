@@ -1,4 +1,8 @@
 rootProject.name = 'todo-tasker'
 include 'rest-api'
 include 'webapp'
+include 'rest-api:rest-connector'
+findProject(':rest-api:rest-connector')?.name = 'rest-connector'
+include 'rest-api:rest-model'
+findProject(':rest-api:rest-model')?.name = 'rest-model'
 
