@@ -28,6 +28,7 @@ const NOW = new Date(),
     ],
     RANGE_VALUE = 8,
     MIN_LENGTH_FOR_TEXT_AREA = 30;
+const URN_TO_TASKS = `/tasks`;
 
 const moveLeft = document.getElementById("move_left"),
     moveRight = document.getElementById("move_right"),
@@ -62,18 +63,17 @@ function getCookie(name) {
 //Server
 
 async function getTasks(from, to) {
-  return await fetch('/tasks/range', {
-    method: 'POST',
+  return await fetch(`${URN_TO_TASKS}/range?date_from=${from}&date_to=${to}`, {
+    method: 'GET',
     headers: {
       'Content-type': 'application/json'
-    },
-    body: JSON.stringify({'from': from, 'to': to}),
+    }
   }).then(response => response.text())
   .then(text => Object.assign(allTasks, JSON.parse(text)));
 }
 
 function saveTask(date, inputElement, taskDiv) {
-  fetch('/tasks/save', {
+  fetch(`${URN_TO_TASKS}/save`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
@@ -97,19 +97,21 @@ function saveTask(date, inputElement, taskDiv) {
 }
 
 function deleteTask(id) {
-  fetch(`/tasks/${id}`, {
+  fetch(`${URN_TO_TASKS}/${id}`, {
     method: 'DELETE'
   }).then();
 }
 
 function updateTask(id, value, done, date) {
-  fetch(`/tasks/update/${id}`, {
+
+  fetch(`${URN_TO_TASKS}/update/${id}`, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/json'
     },
     body: JSON.stringify(
         {
+          'clientId': getCookie('clientId'),
           'taskName': value,
           'done': done,
           'date': date
@@ -206,7 +208,7 @@ function createDivForExistTask(date, item) {
   taskValueDiv.renderAppend(taskDiv.divElement);
   task.renderAppend(taskValueDiv.divElement);
   task.inputElement.disabled = true;
-  if (item['done'] === 'checked') {
+  if (item['done'] === true) {
     task.inputElement.classList.add('is_done');
   }
   changeDoneStatusOnClick(taskValueDiv.divElement, task.inputElement,
@@ -339,7 +341,15 @@ function isMatchedValueForTextArea(value, taskDiv) {
 function createTask(date) {
   let tasksValue = null;
   if (allTasks.hasOwnProperty(date)) {
-    tasksValue = allTasks[date];
+    tasksValue = allTasks[date].sort(function (a, b) {
+      if (a.id > b.id) {
+        return 1
+      }
+      if (a.id < b.id) {
+        return -1
+      }
+      return 0
+    });
     for (let index = 0; index < tasksValue.length; index++) {
       createDivForExistTask(date, tasksValue[index]);
     }

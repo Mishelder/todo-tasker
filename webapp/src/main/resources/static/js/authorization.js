@@ -85,7 +85,7 @@ form.addEventListener('submit', (e) => {
   }).then(response => response.json())
   .then(body => {
     if (body.hasOwnProperty("id")) {
-      document.location = "/todo";
+      document.location = url === "/auth" ? "/todo" : "/auth";
     } else {
       setErrorData(body);
     }
