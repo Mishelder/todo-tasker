@@ -8,14 +8,17 @@ html[theme=dark] {
 }
 
 div.to_do_day {
-  margin: 20px 0 0;
+  border-radius: 25px;
+  background: #ebf2ff;
+  margin: 10px 7px 0;
   float: left;
-  width: 20%;
+  width: 19%;
   min-height: 400px;
   height: auto;
 }
 
 div.date {
+  margin: 18px 0 0
 }
 
 .value_task > input {
@@ -61,7 +64,6 @@ div.task {
 }
 
 div.current_day {
-  border-radius: 25px;
   background: #B9D3DC;
 }
 
@@ -103,11 +105,11 @@ div.to_do_list {
   margin-bottom: 41px;
 }
 
-.change_right {
+.move_right {
   margin-left: 10px;
 }
 
-.change_left {
+.move_left {
   margin-right: 10px;
 }
 
