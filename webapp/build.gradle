@@ -16,22 +16,23 @@ repositories {
  * */
 dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.4'
-  implementation project(':rest-api:rest-connector')
+  implementation project(':domain:domain-connector')
   implementation 'io.github.openfeign:feign-core:11.7'
   implementation 'io.github.openfeign:feign-okhttp:11.7'
   implementation 'io.github.openfeign:feign-slf4j:11.7'
   implementation 'io.github.openfeign:feign-gson:11.7'
+
+  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+
   implementation 'io.github.openfeign:feign-jackson:11.7'
+  implementation 'io.jsonwebtoken:jjwt:0.2'
 }
 
 /**
  * Other
  */
 dependencies {
-    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
     compileOnly "org.projectlombok:lombok:1.18.20"
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }

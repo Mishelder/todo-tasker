@@ -3,7 +3,7 @@ package com.miaskor.todo.spring.filter;
 import static com.miaskor.todo.spring.util.URLs.LOGIN;
 import static com.miaskor.todo.spring.util.URLs.getAllPublicURL;
 
-import by.miaskor.rest.dto.ClientDtoResponse;
+import by.miaskor.domain.dto.ClientDtoResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
