@@ -9,6 +9,8 @@
     <div class="header-bar">
         <h1 class="logo">ToDo</h1>
         <ul class="slider-menu">
+            <li onclick="this.firstChild.click()" th:if="${session.client != null}"><a
+                href="/inbox" class="links">Inbox</a></li>
             <li onclick="this.firstChild.click()" th:if="${session.client != null && session.about == null}"><a
                 href="/todo" id="home_btn" class="links">Home</a></li>
             <li onclick="this.firstChild.click()"
