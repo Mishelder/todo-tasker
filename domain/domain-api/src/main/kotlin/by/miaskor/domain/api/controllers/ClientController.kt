@@ -8,6 +8,7 @@ import by.miaskor.domain.factories.ClientDtoResponseFactory
 import by.miaskor.domain.store.entities.ClientEntity
 import by.miaskor.domain.store.repositories.ClientRepository
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +23,8 @@ import java.util.*
 @RequestMapping("/api")
 open class ClientController(
   private val clientRepository: ClientRepository,
-  private val clientDtoResponseFactory: ClientDtoResponseFactory
+  private val clientDtoResponseFactory: ClientDtoResponseFactory,
+  private val passwordEncoder: PasswordEncoder
 ) {
 
   @PostMapping(CREATE_CLIENT)
@@ -39,11 +41,12 @@ open class ClientController(
           } already exists"
         )
       }
+    val encodedPassword = passwordEncoder.encode(clientDtoRequest.password)
     val clientEntity = clientRepository.saveAndFlush(
       ClientEntity(
         email = clientDtoRequest.email,
         login = clientDtoRequest.login,
-        password = clientDtoRequest.password
+        password = encodedPassword
       )
     )
     return ResponseEntity.ok(clientDtoResponseFactory.makeClientDtoResponse(clientEntity))
@@ -89,10 +92,11 @@ open class ClientController(
       ResponseEntity<ClientDtoResponse> {
     checkValueBlank("Login", login)
     checkValueBlank("Password", password)
-    clientRepository.findByLogin(login)
+    val clientEntity = clientRepository.findByLogin(login)
       .orElseThrow { NotFoundException("Client with login $login not exists") }
-    val clientEntity = clientRepository.findByLoginAndPassword(login, password)
-      .orElseThrow { NotFoundException("Client with login $login and password $password not exists") }
+    if (!passwordEncoder.matches(password, clientEntity.password)) {
+      throw NotFoundException("Client with login $login and password $password not exists")
+    }
     return ResponseEntity.ok(
       clientDtoResponseFactory.makeClientDtoResponse(clientEntity)
     )

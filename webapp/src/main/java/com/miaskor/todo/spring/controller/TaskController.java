@@ -1,7 +1,6 @@
 package com.miaskor.todo.spring.controller;
 
 import by.miaskor.domain.connector.TaskConnector;
-import by.miaskor.domain.dto.ClientDtoResponse;
 import by.miaskor.domain.dto.TaskDtoRequest;
 import by.miaskor.domain.dto.TaskDtoResponse;
 import java.util.List;
@@ -40,7 +39,7 @@ public class TaskController {
   public Map<String, List<TaskDtoResponse>> getAllByClientIdAndDateBetween(
       @RequestParam("date_from") String dateFrom,
       @RequestParam("date_to") String dateTo) {
-    int clientId = ((ClientDtoResponse) httpSession.getAttribute("client")).getId();
+    int clientId = Integer.parseInt(httpSession.getAttribute("clientId").toString());
     return taskConnector.getAllByClientIdAndDateBetween(
         dateFrom,
         dateTo,
