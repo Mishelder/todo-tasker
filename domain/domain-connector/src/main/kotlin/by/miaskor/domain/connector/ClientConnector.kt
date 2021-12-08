@@ -6,18 +6,16 @@ import feign.Headers
 import feign.Param
 import feign.RequestLine
 
+@Headers(value = ["Content-type: application/json"])
 interface ClientConnector {
 
   @RequestLine("GET /auth?login={login}&password={password}")
-  @Headers("Content-Type: application/json")
   fun getClientByLoginAndPassword(@Param("login") login: String, @Param("password") password: String):
-      ClientDtoResponse?
+      ClientDtoResponse
 
   @RequestLine("GET ?login={login}")
-  @Headers("Content-Type: application/json")
-  fun getClientByLogin(@Param("login") login: String): ClientDtoResponse?
+  fun getClientByLogin(@Param("login") login: String): ClientDtoResponse
 
   @RequestLine("POST /")
-  @Headers("Content-Type: application/json")
-  fun createClient(clientDtoRequest: ClientDtoRequest): ClientDtoResponse?
+  fun createClient(clientDtoRequest: ClientDtoRequest): ClientDtoResponse
 }

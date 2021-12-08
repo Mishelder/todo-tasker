@@ -8,5 +8,4 @@ interface ClientRepository : JpaRepository<ClientEntity, Int> {
   fun findByEmailOrLogin(email: String, login: String): Optional<ClientEntity>
   fun findByLogin(login: String): Optional<ClientEntity>
   fun findByEmail(email: String): Optional<ClientEntity>
-  fun findByLoginAndPassword(email: String, password: String): Optional<ClientEntity>
 }

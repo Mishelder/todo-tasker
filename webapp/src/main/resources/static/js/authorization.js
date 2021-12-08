@@ -82,12 +82,11 @@ form.addEventListener('submit', (e) => {
       'Content-type': 'application/json'
     },
     body: JSON.stringify(data)
-  }).then(response => response.json())
-  .then(body => {
-    if (body.hasOwnProperty("id")) {
-      document.location = url === "/auth" ? "/todo" : "/auth";
+  }).then(response => {
+    if (response.redirected) {
+      document.location = response.url;
     } else {
-      setErrorData(body);
+
     }
   }).catch(reason => error.textContent = "Something went wrong!");
 });

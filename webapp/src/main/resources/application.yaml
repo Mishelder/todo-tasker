@@ -11,7 +11,10 @@ feign:
 
 connector:
   rest-api:
-    url: http://localhost:8080/api
+    client-url: http://localhost:8080/api/clients
+    task-url: http://localhost:8080/api/tasks
+  token:
+    url: http://localhost:8082/api
 
 
 
