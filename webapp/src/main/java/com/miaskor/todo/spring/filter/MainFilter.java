@@ -42,7 +42,6 @@ public class MainFilter extends HttpFilter {
         .orElse(null);
 
     if (token != null &&
-        !token.getValue().isEmpty() &&
         Boolean.TRUE.equals(tokenConnector.validateToken(token.getValue()))
     ) {
       req.setAttribute("token", token);
