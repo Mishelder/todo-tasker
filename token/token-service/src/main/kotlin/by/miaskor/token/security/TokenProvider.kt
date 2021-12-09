@@ -1,8 +1,7 @@
-package by.miaskor.token.security.jwt
+package by.miaskor.token.security
 
 import by.miaskor.token.connector.domain.ClientAuthDtoRequest
 import by.miaskor.token.exception.AuthenticationException
-import by.miaskor.token.security.JwtUserDetailsService
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -10,8 +9,8 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
-class JwtTokenProvider(
-  private val userDetailsService: JwtUserDetailsService
+class TokenProvider(
+  private val userDetailsService: UserDetailsService
 ) {
 
   fun createToken(clientAuthDtoRequest: ClientAuthDtoRequest): String {

@@ -1,9 +1,9 @@
 package by.miaskor.token.config
 
 import by.miaskor.domain.connector.ClientConnector
-import by.miaskor.token.security.JwtUserDetailsService
-import by.miaskor.token.security.jwt.JwtTokenProvider
-import by.miaskor.token.security.jwt.JwtUserFactory
+import by.miaskor.token.security.TokenProvider
+import by.miaskor.token.security.UserDetailsService
+import by.miaskor.token.security.UserFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -33,18 +33,18 @@ open class SecurityConfig(
   }
 
   @Bean
-  open fun jwtUserFactory(): JwtUserFactory {
-    return JwtUserFactory()
+  open fun jwtUserFactory(): UserFactory {
+    return UserFactory()
   }
 
   @Bean
-  open fun jwtUserDetailsService(): JwtUserDetailsService {
-    return JwtUserDetailsService(clientConnector, jwtUserFactory())
+  open fun jwtUserDetailsService(): UserDetailsService {
+    return UserDetailsService(clientConnector, jwtUserFactory())
   }
 
   @Bean
-  open fun jwtTokenProvider(): JwtTokenProvider {
-    return JwtTokenProvider(jwtUserDetailsService())
+  open fun jwtTokenProvider(): TokenProvider {
+    return TokenProvider(jwtUserDetailsService())
   }
 
   override fun configure(http: HttpSecurity) {

@@ -1,11 +1,11 @@
-package by.miaskor.token.security.jwt
+package by.miaskor.token.security
 
 import by.miaskor.domain.dto.ClientDtoResponse
 
-class JwtUserFactory {
+class UserFactory {
 
-  fun create(clientDtoResponse: ClientDtoResponse): JwtUser {
-    return JwtUser(
+  fun create(clientDtoResponse: ClientDtoResponse): User {
+    return User(
       id = clientDtoResponse.id,
       login = clientDtoResponse.login,
       email = clientDtoResponse.email,

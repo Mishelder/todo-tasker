@@ -1,9 +1,9 @@
-package by.miaskor.token.security.jwt
+package by.miaskor.token.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-data class JwtUser(
+data class User(
   val id: Int,
   val login: String,
   val email: String,
