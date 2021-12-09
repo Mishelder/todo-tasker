@@ -36,8 +36,8 @@ public class ViewController {
 
   @GetMapping("/logout")
   public String loggedOut() {
-    Cookie clientId = new Cookie("clientId", "");
-    Cookie accessToken = new Cookie("token", "");
+    Cookie clientId = new Cookie("clientId", null);
+    Cookie accessToken = new Cookie("token", null);
     clientId.setMaxAge(0);
     accessToken.setMaxAge(0);
     httpServletResponse.addCookie(clientId);
