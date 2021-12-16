@@ -35,5 +35,5 @@ interface TaskConnector {
   fun delete(@Param("id") taskId: Int)
 
   @RequestLine("GET /currentDay/{bot_id}")
-  fun getTasksOnCurrentDayByBotId(@Param("bot_id") botId: Int): List<TaskDtoResponse>
+  fun getTasksOnCurrentDayByBotId(@Param("bot_id") botId: Long): List<TaskDtoResponse>
 }

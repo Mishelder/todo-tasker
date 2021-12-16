@@ -66,7 +66,7 @@ open class ClientController(
   }
 
   @GetMapping(GET_CLIENT_BY_BOT_ID)
-  fun getClientByBotId(@PathVariable("id") botId: Int): ResponseEntity<ClientDtoResponse> {
+  fun getClientByBotId(@PathVariable("id") botId: Long): ResponseEntity<ClientDtoResponse> {
     val clientEntity = clientRepository.findByBotId(botId)
       .orElseThrow { NotFoundException("Client with bot id $botId not exists or not used") }
     return ResponseEntity.ok(

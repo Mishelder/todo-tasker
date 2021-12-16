@@ -30,7 +30,7 @@ open class TaskController(
 ) {
 
   @GetMapping(GET_TASKS_ON_CURRENT_DAY_BY_BOT_ID)
-  fun getTasksOnCurrentDayByBotId(@PathVariable botId: Int): ResponseEntity<List<TaskDtoResponse>> {
+  fun getTasksOnCurrentDayByBotId(@PathVariable botId: Long): ResponseEntity<List<TaskDtoResponse>> {
     val clientEntity = clientRepository.findByBotId(botId)
       .orElseThrow { NotFoundException("Client with bot id $botId not exists or not used") }
     val listTasks = taskRepository.findByDateAndClientId(LocalDate.now(), clientEntity.id)
