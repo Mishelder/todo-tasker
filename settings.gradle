@@ -10,3 +10,5 @@ include 'token:token-service'
 findProject(':token:token-service')?.name = 'token-service'
 include 'token:token-connector'
 findProject(':token:token-connector')?.name = 'token-connector'
+include 'telegram-bot'
+
