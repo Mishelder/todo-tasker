@@ -31,8 +31,8 @@ async function saveTask(date, taskName, taskState) {
         {
           'clientId': getCookie('clientId'),
           'taskName': taskName,
-          'date': date,
-          'taskState': taskState
+          'taskState': taskState,
+          'date': date
         }),
   }).then(response => response.json())
 }
@@ -43,8 +43,7 @@ function deleteTask(id) {
   }).then();
 }
 
-function updateTask(id, value, done, date) {
-
+function updateTask(id, taskState, taskName, date) {
   fetch(`${URN_TO_TASKS}/update/${id}`, {
     method: 'PUT',
     headers: {
@@ -53,8 +52,8 @@ function updateTask(id, value, done, date) {
     body: JSON.stringify(
         {
           'clientId': getCookie('clientId'),
-          'taskName': value,
-          'done': done,
+          'taskName': taskName,
+          'taskState': taskState,
           'date': date
         }),
   }).then();

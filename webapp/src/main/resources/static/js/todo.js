@@ -1,22 +1,3 @@
-Date.prototype.addDays = function (days) {
-  this.setDate(this.getDate() + days);
-}
-
-Date.prototype.subtractDays = function (days) {
-  this.setDate(this.getDate() - days);
-}
-
-Date.prototype.formatToDM = function () {
-  return this.getDate() + ' ' + MONTH_NAMES[this.getMonth()];
-}
-
-Date.prototype.formatToDMY = function () {
-  return this.getFullYear() + '-' + isNeededZero(this.getMonth() + 1) + '-'
-      + isNeededZero(this.getDate());
-}
-
-
-
 const NOW = new Date(),
     MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
@@ -113,16 +94,6 @@ function createToDoDay(date) {
   divDate.divElement.append(labelDate);
   divTasks.renderAppend(divToDoDay.divElement);
   return divToDoDay;
-}
-
-function changeDoneStatusOnClick(taskValueDiv, inputElement, taskDiv) {
-  taskValueDiv.addEventListener('click', () => {
-    if (inputElement.value.length !== 0) {
-      const toDoDay = taskDiv.parentElement.parentElement;
-      updateTask(taskDiv.id, inputElement.value,
-          inputElement.classList.toggle('is_done'), toDoDay.id);
-    }
-  });
 }
 
 const calendar = document.getElementById("date");
