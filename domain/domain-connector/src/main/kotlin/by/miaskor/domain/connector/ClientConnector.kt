@@ -18,4 +18,7 @@ interface ClientConnector {
 
   @RequestLine("POST /")
   fun createClient(clientDtoRequest: ClientDtoRequest): ClientDtoResponse
+
+  @RequestLine("POST /byBotId/{bot_id}")
+  fun getClientByBotId(@Param("bot_id") botId: Int): ClientDtoResponse
 }

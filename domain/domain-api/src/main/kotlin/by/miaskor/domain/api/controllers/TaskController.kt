@@ -152,6 +152,6 @@ open class TaskController(
     private const val GET_ALL_BY_CLIENT_ID_IN_RANGE = "/tasks/range"
     private const val GET_ALL_BY_CLIENT_ID_AND_DATE = "/tasks/date"
     private const val GET_ALL_BY_CLIENT_ID = "/tasks/all"
-    private const val GET_TASKS_ON_CURRENT_DAY_BY_BOT_ID = "/tasks/current/{botId}"
+    private const val GET_TASKS_ON_CURRENT_DAY_BY_BOT_ID = "/tasks/currentDay/{botId}"
   }
 }
