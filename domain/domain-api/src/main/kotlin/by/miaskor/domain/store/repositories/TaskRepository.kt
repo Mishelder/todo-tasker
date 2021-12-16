@@ -9,4 +9,5 @@ interface TaskRepository : JpaRepository<TaskEntity, Int> {
   fun findByIdAndClientId(id: Int, clientId: Int): Optional<TaskEntity>
   fun findByDateBetweenAndClientIdOrderByDate(dateFrom: LocalDate, dateTo: LocalDate, clientId: Int): List<TaskEntity>
   fun findByDateAndClientId(date: LocalDate, clientId: Int): List<TaskEntity>
+  fun findByClientId(clientId: Int): List<TaskEntity>
 }

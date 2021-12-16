@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 open class SecurityConfig(
-  private val clientConnector: ClientConnector
+  private val clientConnector: ClientConnector,
 ) : WebSecurityConfigurerAdapter() {
 
   @Bean

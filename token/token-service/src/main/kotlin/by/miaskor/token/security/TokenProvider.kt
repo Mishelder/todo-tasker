@@ -1,28 +1,19 @@
 package by.miaskor.token.security
 
 import by.miaskor.token.connector.domain.ClientAuthDtoRequest
-import by.miaskor.token.exception.AuthenticationException
+import by.miaskor.token.exception.CustomAuthenticationException
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class TokenProvider(
   private val userDetailsService: UserDetailsService,
-  private val response: HttpServletResponse,
-  private val request: HttpServletRequest
 ) {
 
-  fun setToken(clientAuthDtoRequest: ClientAuthDtoRequest) {
-    val createToken = createToken(clientAuthDtoRequest)
-    response.setHeader("Authorization", createToken)
-  }
-
-  private fun createToken(clientAuthDtoRequest: ClientAuthDtoRequest): String {
+  fun createToken(clientAuthDtoRequest: ClientAuthDtoRequest): String {
     return JWT.create()
       .withSubject(clientAuthDtoRequest.login)
       .withExpiresAt(Date(System.currentTimeMillis() + EXPIRED_TIME))
@@ -34,13 +25,7 @@ class TokenProvider(
     return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
   }
 
-  private fun parseToken(): String {
-    return request.getHeader("Authorization")
-      ?: throw AuthenticationException("Unauthorized")
-  }
-
-  fun validateToken(): Boolean {
-    val token = parseToken()
+  fun validateToken(token: String): Boolean {
     if (token.isEmpty()) {
       return false
     }
@@ -49,7 +34,7 @@ class TokenProvider(
       getAuthentication(token)
       claims.after(Date())
     } catch (e: Exception) {
-      throw AuthenticationException("JWT token is expired or invalid")
+      throw CustomAuthenticationException("JWT token is expired or invalid")
     }
   }
 
@@ -58,7 +43,7 @@ class TokenProvider(
   }
 
   companion object {
-    private const val EXPIRED_TIME = 10 * 60 * 3600
+    private const val EXPIRED_TIME = 60 * 60 * 1000
     private val algorithm = Algorithm.HMAC256("secret".toByteArray())
   }
 }

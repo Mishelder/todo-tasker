@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 1)
+@Order(value = 10)
 @Component
 public class EncodingFilter extends HttpFilter {
 

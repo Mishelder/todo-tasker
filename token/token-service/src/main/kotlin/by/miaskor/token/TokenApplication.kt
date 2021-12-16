@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-open class JwtApplication
+open class TokenApplication
 
 fun main(args: Array<String>) {
-  runApplication<JwtApplication>(*args)
+  runApplication<TokenApplication>(*args)
 }

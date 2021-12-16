@@ -1,4 +1,4 @@
-package by.miaskor.domain.api.exceptions
+package by.miaskor.domain.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

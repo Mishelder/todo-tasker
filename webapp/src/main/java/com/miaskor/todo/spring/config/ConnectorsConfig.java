@@ -2,16 +2,28 @@ package com.miaskor.todo.spring.config;
 
 import by.miaskor.domain.connector.ClientConnector;
 import by.miaskor.domain.connector.TaskConnector;
+import by.miaskor.domain.dto.ClientDtoRequest;
+import by.miaskor.domain.dto.ClientDtoResponse;
+import by.miaskor.domain.dto.TaskDtoRequest;
+import by.miaskor.domain.dto.TaskDtoResponse;
 import by.miaskor.token.connector.connector.TokenConnector;
+import by.miaskor.token.connector.domain.ClientAuthDtoRequest;
+import by.miaskor.token.connector.domain.TokenDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import feign.Feign;
+import com.miaskor.todo.spring.handler.error.decoder.TokenFeignErrorDecoder;
 import feign.Logger;
+import feign.hystrix.HystrixFeign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,34 +46,100 @@ public class ConnectorsConfig {
 
   @Bean
   public ClientConnector clientConnector() {
-    return Feign.builder()
+    return HystrixFeign.builder()
         .client(new OkHttpClient())
         .decoder(new JacksonDecoder(objectMapper()))
         .encoder(new JacksonEncoder(objectMapper()))
         .logger(new Slf4jLogger(ClientConnector.class))
         .logLevel(Logger.Level.FULL)
-        .target(ClientConnector.class, urlDomainClientConnector);
+        .target(ClientConnector.class, urlDomainClientConnector, new ClientConnector() {
+          @NotNull
+          @Override
+          public ClientDtoResponse getClientByLoginAndPassword(@NotNull String login, @NotNull String password) {
+            return new ClientDtoResponse();
+          }
+
+          @NotNull
+          @Override
+          public ClientDtoResponse getClientByLogin(@NotNull String login) {
+            return new ClientDtoResponse();
+          }
+
+          @NotNull
+          @Override
+          public ClientDtoResponse createClient(@NotNull ClientDtoRequest clientDtoRequest) {
+            return new ClientDtoResponse();
+          }
+        });
   }
 
   @Bean
   public TaskConnector taskConnector() {
-    return Feign.builder()
+    return HystrixFeign.builder()
         .client(new OkHttpClient())
         .decoder(new JacksonDecoder(objectMapper()))
         .encoder(new JacksonEncoder(objectMapper()))
         .logger(new Slf4jLogger(TaskConnector.class))
         .logLevel(Logger.Level.FULL)
-        .target(TaskConnector.class, urlDomainTaskConnector);
+        .target(TaskConnector.class, urlDomainTaskConnector, new TaskConnector() {
+          @NotNull
+          @Override
+          public List<TaskDtoResponse> getAllByClientId(int clientId) {
+            return new ArrayList<>();
+          }
+
+          @NotNull
+          @Override
+          public TaskDtoResponse create(@NotNull TaskDtoRequest task) {
+            return new TaskDtoResponse();
+          }
+
+          @NotNull
+          @Override
+          public Map<String, List<TaskDtoResponse>> getAllByClientIdAndDateBetween(@NotNull String dateFrom,
+              @NotNull String dateTo, int clientId) {
+            return new HashMap<>();
+          }
+
+          @NotNull
+          @Override
+          public List<TaskDtoResponse> getAllByClientIdAndDate(@NotNull String date, int clientId) {
+            return new ArrayList<>();
+          }
+
+          @NotNull
+          @Override
+          public TaskDtoResponse update(int taskId, @NotNull TaskDtoRequest task) {
+            return new TaskDtoResponse();
+          }
+
+          @Override
+          public void delete(int taskId) {
+
+          }
+        });
   }
 
   @Bean
   public TokenConnector tokenConnector() {
-    return Feign.builder()
+    return HystrixFeign.builder()
         .client(new OkHttpClient())
+        .errorDecoder(new TokenFeignErrorDecoder())
         .decoder(new JacksonDecoder(objectMapper()))
         .encoder(new JacksonEncoder(objectMapper()))
         .logger(new Slf4jLogger(TokenConnector.class))
         .logLevel(Logger.Level.FULL)
-        .target(TokenConnector.class, urlTokenConnector);
+        .target(TokenConnector.class, urlTokenConnector, new TokenConnector() {
+          @NotNull
+          @Override
+          public Map<String, String> createToken(@NotNull ClientAuthDtoRequest clientAuthDtoRequest) {
+            return new HashMap<>();
+          }
+
+          @Override
+          public boolean validateToken(@NotNull TokenDto tokenDto) {
+            return false;
+          }
+        });
   }
 }

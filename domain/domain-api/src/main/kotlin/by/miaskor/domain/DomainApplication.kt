@@ -4,10 +4,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-open class Application
+open class DomainApplication
 
 fun main(args: Array<String>) {
-  runApplication<Application>(*args)
+  runApplication<DomainApplication>(*args)
 }
 
 

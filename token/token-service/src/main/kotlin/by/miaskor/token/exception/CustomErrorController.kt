@@ -1,4 +1,4 @@
-package by.miaskor.domain.api.exceptions
+package by.miaskor.token.exception
 
 import by.miaskor.domain.dto.ErrorDto
 import org.springframework.boot.web.error.ErrorAttributeOptions

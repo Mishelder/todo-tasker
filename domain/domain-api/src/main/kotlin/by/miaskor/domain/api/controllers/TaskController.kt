@@ -40,7 +40,6 @@ open class TaskController(
       TaskEntity(
         clientId = taskDtoRequest.clientId,
         taskName = taskDtoRequest.taskName,
-        done = taskDtoRequest.done,
         date = taskDtoRequest.date,
         taskState = taskDtoRequest.taskState
       )
@@ -63,7 +62,6 @@ open class TaskController(
         id = taskId,
         clientId = taskDtoRequest.clientId,
         taskName = taskDtoRequest.taskName,
-        done = taskDtoRequest.done,
         date = taskDtoRequest.date,
         taskState = taskDtoRequest.taskState
       )
@@ -120,6 +118,16 @@ open class TaskController(
     )
   }
 
+  @GetMapping(GET_ALL_BY_CLIENT_ID)
+  fun getAllByClientId(@RequestParam("client_id") clientId: Int): ResponseEntity<List<TaskDtoResponse>> {
+    clientRepository.findById(clientId)
+      .orElseThrow { NotFoundException("Client with id = $clientId doesn't exists") }
+    val listTaskEntities = taskRepository.findByClientId(clientId)
+    return ResponseEntity.ok(
+      listTaskEntities.map { taskDtoResponseFactory.makeTaskDtoResponse(it) }.toList()
+    )
+  }
+
   @DeleteMapping(DELETE_TASK)
   fun delete(@PathVariable("id") taskId: Int) {
     taskRepository.findById(taskId)
@@ -133,5 +141,6 @@ open class TaskController(
     private const val DELETE_TASK = "/tasks/{id}"
     private const val GET_ALL_BY_CLIENT_ID_IN_RANGE = "/tasks/range"
     private const val GET_ALL_BY_CLIENT_ID_AND_DATE = "/tasks/date"
+    private const val GET_ALL_BY_CLIENT_ID = "/tasks/all"
   }
 }

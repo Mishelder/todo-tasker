@@ -60,11 +60,25 @@ changeActiveHeader();
 
 function setErrorData(data) {
   if (data.message.includes("password")) {
-    error.textContent = `password is invalid`;
+    login.style.backgroundColor = "#772255"
+    login.style.outline = "#333333"
+    login.style.border = "1px"
+    password.style.backgroundColor = "#772255"
+    password.style.outline = "#333333"
+    password.style.border = "1px"
+    error.textContent = `Login or password is invalid`;
   } else if (data.message.includes("email")) {
-    error.textContent = `email is invalid`;
+    email.style.backgroundColor = "#772255"
+    email.style.outline = "#333333"
+    email.style.border = "1px"
+    error.textContent = `Email is invalid`;
+  } else if (data.message.includes("login")) {
+    login.style.backgroundColor = "#772255"
+    login.style.outline = "#333333"
+    login.style.border = "1px"
+    error.textContent = `Login is invalid`;
   } else {
-    error.textContent = `login or password is invalid`;
+    error.textContent = `Something went wrong!`
   }
   error.classList.remove("hidden");
 }
@@ -83,12 +97,16 @@ form.addEventListener('submit', (e) => {
     },
     body: JSON.stringify(data)
   }).then(response => {
-    if (response.redirected) {
-      document.location = response.url;
+    if (response.ok) {
+      if (response.redirected) {
+        document.location = response.url;
+      }
     } else {
-
+      response.json().then(body => {
+        setErrorData(body)
+      })
     }
-  }).catch(reason => error.textContent = "Something went wrong!");
+  })
 });
 
 document.addEventListener('click', () => {
@@ -99,6 +117,9 @@ document.addEventListener('click', () => {
     if (!element.classList.contains('hidden')) {
       element.classList.add('hidden');
       element.textContent = '';
+      login.style = '';
+      password.style = '';
+      email.style = '';
     }
   }
 });

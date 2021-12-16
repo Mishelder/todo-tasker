@@ -33,12 +33,16 @@ open class ClientController(
     checkValueBlank("Password", clientDtoRequest.password)
     checkValueBlank("Email", clientDtoRequest.email)
 
-    clientRepository.findByEmailOrLogin(clientDtoRequest.email, clientDtoRequest.login)
+    clientRepository.findByEmail(clientDtoRequest.email)
       .ifPresent {
         throw BadRequestException(
-          "Client with email = ${clientDtoRequest.email} or login = ${
-            clientDtoRequest.login
-          } already exists"
+          "Client with email = ${clientDtoRequest.email}  already exists"
+        )
+      }
+    clientRepository.findByLogin(clientDtoRequest.login)
+      .ifPresent {
+        throw BadRequestException(
+          "Client with login = ${clientDtoRequest.login} already exists"
         )
       }
     val encodedPassword = passwordEncoder.encode(clientDtoRequest.password)
