@@ -1,6 +1,7 @@
 package by.miaskor.token.connector.connector
 
 import by.miaskor.token.connector.domain.ClientAuthDtoRequest
+import by.miaskor.token.connector.domain.TokenDto
 import feign.Headers
 import feign.RequestLine
 
@@ -11,5 +12,5 @@ interface TokenConnector {
   fun createToken(clientAuthDtoRequest: ClientAuthDtoRequest): Map<String, String>
 
   @RequestLine("POST /validate/token")
-  fun validateToken(): Boolean
+  fun validateToken(tokenDto: TokenDto): Boolean
 }

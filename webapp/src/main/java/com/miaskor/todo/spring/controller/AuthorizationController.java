@@ -4,11 +4,9 @@ import by.miaskor.domain.connector.ClientConnector;
 import by.miaskor.domain.dto.ClientDtoRequest;
 import by.miaskor.token.connector.connector.TokenConnector;
 import by.miaskor.token.connector.domain.ClientAuthDtoRequest;
+import com.miaskor.todo.spring.service.AuthorizationService;
 import java.net.URI;
 import java.util.Map;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,32 +17,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class AuthorizationController {
 
-  private final HttpServletResponse httpServletResponse;
-  private final HttpSession httpSession;
   private final ClientConnector clientConnector;
   private final TokenConnector tokenConnector;
+  private final AuthorizationService authorizationService;
 
   @Autowired
-  public AuthorizationController(HttpServletResponse httpServletResponse, HttpSession httpSession,
-      ClientConnector clientConnector, TokenConnector tokenConnector) {
-    this.httpServletResponse = httpServletResponse;
-    this.httpSession = httpSession;
+  public AuthorizationController(ClientConnector clientConnector,
+      TokenConnector tokenConnector, AuthorizationService authorizationService) {
     this.clientConnector = clientConnector;
     this.tokenConnector = tokenConnector;
+    this.authorizationService = authorizationService;
   }
 
   @PostMapping("/auth")
   public ResponseEntity<Object> loginClient(@RequestBody ClientDtoRequest clientDtoRequest) {
-    Map<String, String> token = tokenConnector.createToken(
+    Map<String, String> data = tokenConnector.createToken(
         new ClientAuthDtoRequest(clientDtoRequest.getLogin(), clientDtoRequest.getPassword())
     );
-    Cookie clientId = new Cookie("clientId", token.get("clientId"));
-    Cookie accessToken = new Cookie("token", token.get("token"));
-    httpServletResponse.addCookie(clientId);
-    httpServletResponse.addCookie(accessToken);
-    httpSession.setAttribute("clientId", token.get("clientId"));
-    httpSession.setAttribute("token", token.get("token"));
-    return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).location(URI.create("/todo")).build();
+    authorizationService.auth(data);
+    return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+        .location(URI.create("/todo")).build();
   }
 
   @PostMapping("/registration")

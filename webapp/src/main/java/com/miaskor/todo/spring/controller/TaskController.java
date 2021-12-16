@@ -38,13 +38,20 @@ public class TaskController {
   @GetMapping("/range")
   public Map<String, List<TaskDtoResponse>> getAllByClientIdAndDateBetween(
       @RequestParam("date_from") String dateFrom,
-      @RequestParam("date_to") String dateTo) {
+      @RequestParam("date_to") String dateTo
+  ) {
     int clientId = Integer.parseInt(httpSession.getAttribute("clientId").toString());
     return taskConnector.getAllByClientIdAndDateBetween(
         dateFrom,
         dateTo,
         clientId
     );
+  }
+
+  @GetMapping("/all")
+  public List<TaskDtoResponse> getAllByClientIdAndDateBetween(
+      @RequestParam("client_id") Integer clientId) {
+    return taskConnector.getAllByClientId(clientId);
   }
 
   @PutMapping("/update/{id}")

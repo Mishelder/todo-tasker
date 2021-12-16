@@ -4,7 +4,6 @@ import java.time.LocalDate
 
 data class TaskDtoRequest(
   val clientId: Int = 0,
-  val done: Boolean = false,
   val date: LocalDate = LocalDate.now(),
   val taskName: String = "",
   val taskState: TaskState = TaskState.UPCOMING

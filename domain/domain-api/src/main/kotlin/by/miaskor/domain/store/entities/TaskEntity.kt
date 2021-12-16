@@ -18,7 +18,6 @@ data class TaskEntity(
   val id: Int = -1,
   val clientId: Int = -1,
   val date: LocalDate = LocalDate.now(),
-  val done: Boolean = false,
   val taskName: String = "",
   @Enumerated(EnumType.STRING)
   val taskState: TaskState = TaskState.UPCOMING

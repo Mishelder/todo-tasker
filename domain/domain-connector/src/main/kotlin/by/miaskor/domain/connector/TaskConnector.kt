@@ -19,11 +19,14 @@ interface TaskConnector {
     @Param("client_id") clientId: Int
   ): Map<String, List<TaskDtoResponse>>
 
-  @RequestLine("GET /date?date={date}&client_id{client_id}")
+  @RequestLine("GET /date?date={date}&client_id={client_id}")
   fun getAllByClientIdAndDate(
     @Param("date") date: String,
     @Param("client_id") clientId: Int
   ): List<TaskDtoResponse>
+
+  @RequestLine("GET /all?client_id={client_id}")
+  fun getAllByClientId(@Param("client_id") clientId: Int): List<TaskDtoResponse>
 
   @RequestLine("PATCH /{id}")
   fun update(@Param("id") taskId: Int, task: TaskDtoRequest): TaskDtoResponse

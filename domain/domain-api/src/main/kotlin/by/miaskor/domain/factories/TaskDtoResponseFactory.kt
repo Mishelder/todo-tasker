@@ -11,7 +11,6 @@ class TaskDtoResponseFactory {
     return TaskDtoResponse(
       id = taskEntity.id,
       taskName = taskEntity.taskName,
-      done = taskEntity.done,
       taskState = taskEntity.taskState
     )
   }

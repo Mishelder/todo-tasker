@@ -1,6 +1,7 @@
 package by.miaskor.token.config
 
 import by.miaskor.domain.connector.ClientConnector
+import by.miaskor.token.error.decoder.ClientFeignErrorDecoder
 import feign.Feign
 import feign.Logger
 import feign.gson.GsonDecoder
@@ -17,6 +18,7 @@ open class ConnectorConfig {
   open fun clientConnector(): ClientConnector {
     return Feign.builder()
       .client(OkHttpClient())
+      .errorDecoder(ClientFeignErrorDecoder())
       .decoder(GsonDecoder())
       .encoder(GsonEncoder())
       .logger(Slf4jLogger(ClientConnector::class.java))
