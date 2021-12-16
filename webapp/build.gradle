@@ -24,10 +24,10 @@ dependencies {
   implementation 'io.github.openfeign:feign-slf4j:11.7'
   implementation 'io.github.openfeign:feign-gson:11.7'
   implementation 'io.github.openfeign:feign-hystrix:11.7'
+    implementation 'io.github.openfeign:feign-jackson:11.7'
 
-  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
-  implementation 'io.github.openfeign:feign-jackson:11.7'
   implementation 'io.jsonwebtoken:jjwt:0.2'
 }
 

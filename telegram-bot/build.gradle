@@ -15,6 +15,12 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-core'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation project(':domain:domain-connector')
+    implementation 'org.telegram:telegrambots:5.5.0'
+    implementation 'io.github.openfeign:feign-core:11.7'
+    implementation 'io.github.openfeign:feign-okhttp:11.7'
+    implementation 'io.github.openfeign:feign-slf4j:11.7'
+    implementation 'io.github.openfeign:feign-gson:11.7'
+    implementation 'io.github.openfeign:feign-jackson:11.7'
 }
 
 dependencies {
