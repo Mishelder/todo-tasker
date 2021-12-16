@@ -1,20 +1,3 @@
-Date.prototype.addDays = function (days) {
-  this.setDate(this.getDate() + days);
-}
-
-Date.prototype.subtractDays = function (days) {
-  this.setDate(this.getDate() - days);
-}
-
-Date.prototype.formatToDM = function () {
-  return this.getDate() + ' ' + MONTH_NAMES[this.getMonth()];
-}
-
-Date.prototype.formatToDMY = function () {
-  return this.getFullYear() + '-' + isNeededZero(this.getMonth() + 1) + '-'
-      + isNeededZero(this.getDate());
-}
-
 const groupBy = function (xs, key) {
   return xs.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);

@@ -7,12 +7,11 @@ import by.miaskor.domain.dto.ClientDtoResponse;
 import by.miaskor.domain.dto.TaskDtoRequest;
 import by.miaskor.domain.dto.TaskDtoResponse;
 import by.miaskor.token.connector.connector.TokenConnector;
-import by.miaskor.token.connector.domain.ClientAuthDtoRequest;
-import by.miaskor.token.connector.domain.TokenDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.miaskor.todo.spring.handler.error.decoder.TokenFeignErrorDecoder;
+import feign.Feign;
 import feign.Logger;
 import feign.hystrix.HystrixFeign;
 import feign.jackson.JacksonDecoder;
@@ -55,6 +54,12 @@ public class ConnectorsConfig {
         .target(ClientConnector.class, urlDomainClientConnector, new ClientConnector() {
           @NotNull
           @Override
+          public ClientDtoResponse getClientByBotId(int botId) {
+            return new ClientDtoResponse();
+          }
+
+          @NotNull
+          @Override
           public ClientDtoResponse getClientByLoginAndPassword(@NotNull String login, @NotNull String password) {
             return new ClientDtoResponse();
           }
@@ -82,6 +87,12 @@ public class ConnectorsConfig {
         .logger(new Slf4jLogger(TaskConnector.class))
         .logLevel(Logger.Level.FULL)
         .target(TaskConnector.class, urlDomainTaskConnector, new TaskConnector() {
+          @NotNull
+          @Override
+          public List<TaskDtoResponse> getTasksOnCurrentDayByBotId(int botId) {
+            return new ArrayList<>();
+          }
+
           @NotNull
           @Override
           public List<TaskDtoResponse> getAllByClientId(int clientId) {
@@ -120,26 +131,16 @@ public class ConnectorsConfig {
         });
   }
 
+  //TODO(Get Exception when token is expired. And user will get exception on web browser)
   @Bean
   public TokenConnector tokenConnector() {
-    return HystrixFeign.builder()
+    return Feign.builder()
         .client(new OkHttpClient())
         .errorDecoder(new TokenFeignErrorDecoder())
         .decoder(new JacksonDecoder(objectMapper()))
         .encoder(new JacksonEncoder(objectMapper()))
         .logger(new Slf4jLogger(TokenConnector.class))
         .logLevel(Logger.Level.FULL)
-        .target(TokenConnector.class, urlTokenConnector, new TokenConnector() {
-          @NotNull
-          @Override
-          public Map<String, String> createToken(@NotNull ClientAuthDtoRequest clientAuthDtoRequest) {
-            return new HashMap<>();
-          }
-
-          @Override
-          public boolean validateToken(@NotNull TokenDto tokenDto) {
-            return false;
-          }
-        });
+        .target(TokenConnector.class, urlTokenConnector);
   }
 }

@@ -5,6 +5,7 @@ function createDivForExistTask(date, item) {
       taskValueDiv = new Div('', 'value_task'),
       task = new InputElement('text', '', item['taskName'], '', '', false,
           '');
+  setColorByState(taskValueDiv.divElement, item["taskState"]);
   taskDiv.renderAppend(tasksDiv);
   if (item['taskName'].length > MIN_LENGTH_FOR_TEXT_AREA) {
     isMatchedValueForTextArea(task.inputElement.value, taskDiv.divElement);
@@ -12,15 +13,28 @@ function createDivForExistTask(date, item) {
   taskValueDiv.renderAppend(taskDiv.divElement);
   task.renderAppend(taskValueDiv.divElement);
   task.inputElement.disabled = true;
-  if (item['done'] === true) {
-    task.inputElement.classList.add('is_done');
-  }
-  changeDoneStatusOnClick(taskValueDiv.divElement, task.inputElement,
-      taskDiv.divElement);
-  createAlternationDiv(taskDiv.divElement);
+
+  createAlternationDiv(taskDiv.divElement, item["taskState"]);
 }
 
-function createAlternationDiv(taskDiv) {
+function setColorByState(div, state) {
+  switch (state) {
+    case "UPCOMING":
+      div.style.backgroundColor = "darkgray";
+      break;
+    case "IN_PROCESS":
+      div.style.backgroundColor = "dodgerblue";
+      break;
+    case "COMPLETED":
+      div.style.backgroundColor = "lightgreen"
+      break;
+    case "FAILED":
+      div.style.backgroundColor = "#ffaaaa"
+      break;
+  }
+}
+
+function createAlternationDiv(taskDiv, state) {
   const alternationDiv = new Div('', 'alternation_task', 'hidden'),
       deleteImage = document.createElement('img'),
       alternateImage = document.createElement('img'),
@@ -78,6 +92,8 @@ function createAlternationDiv(taskDiv) {
       }
     }
   });
+  setColorByState(divForAlternateImage.divElement, state)
+  setColorByState(alternationDiv.divElement, state)
   divForAlternateImage.divElement.append(alternateImage);
   divForDeleteImage.divElement.append(deleteImage);
   alternationDiv.divElement.append(divForDeleteImage.divElement);
@@ -94,8 +110,6 @@ function createDivForTask(date) {
   taskDiv.renderAppend(tasksDiv);
   taskValueDiv.renderAppend(taskDiv.divElement);
   task.renderAppend(taskValueDiv.divElement);
-  changeDoneStatusOnClick(taskValueDiv.divElement, task.inputElement,
-      taskDiv.divElement);
   task.inputElement.onblur = () => {
     isMatchedValueForTextArea(task.inputElement.value, taskDiv.divElement);
     save();
@@ -148,8 +162,9 @@ function createTask(date) {
     for (let index = 0; index < tasksValue.length; index++) {
       createDivForExistTask(date, tasksValue[index]);
     }
-    createDivForTask(date);
-  } else {
+
+  }
+  if (date >= new Date().formatToDMY()) {
     createDivForTask(date);
   }
 }
