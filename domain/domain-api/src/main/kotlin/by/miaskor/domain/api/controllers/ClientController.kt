@@ -65,6 +65,15 @@ open class ClientController(
     )
   }
 
+  @GetMapping(GET_CLIENT_BY_BOT_ID)
+  fun getClientByBotId(@PathVariable("id") botId: Int): ResponseEntity<ClientDtoResponse> {
+    val clientEntity = clientRepository.findByBotId(botId)
+      .orElseThrow { NotFoundException("Client with bot id $botId not exists or not used") }
+    return ResponseEntity.ok(
+      clientDtoResponseFactory.makeClientDtoResponse(clientEntity)
+    )
+  }
+
   @GetMapping(GET_CLIENT_BY_LOGIN_OR_EMAIL)
   fun getClientByLoginOrEmail(
     @RequestParam("login") login: Optional<String>, @RequestParam("email") email:
@@ -125,5 +134,6 @@ open class ClientController(
     private const val DELETE_CLIENT = "/clients/{id}"
     private const val GET_CLIENT_BY_LOGIN_OR_EMAIL = "/clients"
     private const val GET_CLIENT_BY_LOGIN_AND_PASSWORD = "/clients/auth"
+    private const val GET_CLIENT_BY_BOT_ID = "/clients/byBotId/{id}"
   }
 }
