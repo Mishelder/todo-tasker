@@ -21,8 +21,13 @@ public class ViewController {
     return "inbox";
   }
 
-   @GetMapping("/auth")
+  @GetMapping("/auth")
   public String getLoginPage() {
     return "authorization";
+  }
+
+  @GetMapping("/profile")
+  public String getProfilePage() {
+    return "profile";
   }
 }

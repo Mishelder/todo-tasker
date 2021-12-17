@@ -149,6 +149,6 @@ div.pop_up_task {
   cursor: pointer;
 }
 
-.hidden {
+div.hidden {
   display: none;
 }

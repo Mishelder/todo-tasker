@@ -89,6 +89,12 @@ public class ConnectorsConfig {
         .target(TaskConnector.class, urlDomainTaskConnector, new TaskConnector() {
           @NotNull
           @Override
+          public List<TaskDtoResponse> getTasksOnTomorrowByBotId(long botId) {
+            return new ArrayList<>();
+          }
+
+          @NotNull
+          @Override
           public List<TaskDtoResponse> getTasksOnCurrentDayByBotId(long botId) {
             return new ArrayList<>();
           }

@@ -32,10 +32,6 @@ div.date {
   width: 100%;
 }
 
-input.is_done {
-  text-decoration: line-through;
-}
-
 input.no_mouse {
   user-focus-pointer: none;
 }

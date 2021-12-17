@@ -43,7 +43,7 @@ function deleteTask(id) {
   }).then();
 }
 
-function updateTask(id, taskState, taskName, date) {
+function updateTask(id, taskState = null, taskName = null, date = null) {
   fetch(`${URN_TO_TASKS}/update/${id}`, {
     method: 'PUT',
     headers: {

@@ -54,7 +54,6 @@ function createDivForExistTask(state, item) {
       taskValueDiv = new Div('', 'value_task'),
       task = new InputElement('text', '', item['taskName'], '', '', false,
           '');
-  taskValueDiv
   taskDiv.renderAppend(tasksDiv);
   if (item['taskName'].length > MIN_LENGTH_FOR_TEXT_AREA) {
     isMatchedValueForTextArea(task.inputElement.value, taskDiv.divElement);
@@ -64,6 +63,8 @@ function createDivForExistTask(state, item) {
   taskValueDiv.renderAppend(taskDiv.divElement);
   task.renderAppend(taskValueDiv.divElement);
   task.inputElement.disabled = true;
+
+  createAlternationDiv(taskDiv.divElement, item["taskState"]);
 }
 
 function initStateBlocks() {
