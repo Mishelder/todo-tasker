@@ -54,19 +54,31 @@ public class ConnectorsConfig {
         .target(ClientConnector.class, urlDomainClientConnector, new ClientConnector() {
           @NotNull
           @Override
-          public ClientDtoResponse getClientByBotId(long botId) {
+          public ClientDtoResponse update(int clientId, @NotNull ClientDtoRequest clientDtoRequest) {
             return new ClientDtoResponse();
           }
 
           @NotNull
           @Override
-          public ClientDtoResponse getClientByLoginAndPassword(@NotNull String login, @NotNull String password) {
+          public ClientDtoResponse getById(int clientId) {
             return new ClientDtoResponse();
           }
 
           @NotNull
           @Override
-          public ClientDtoResponse getClientByLogin(@NotNull String login) {
+          public ClientDtoResponse getByBotId(long botId) {
+            return new ClientDtoResponse();
+          }
+
+          @NotNull
+          @Override
+          public ClientDtoResponse getByLoginAndPassword(@NotNull String login, @NotNull String password) {
+            return new ClientDtoResponse();
+          }
+
+          @NotNull
+          @Override
+          public ClientDtoResponse getByLogin(@NotNull String login) {
             return new ClientDtoResponse();
           }
 
@@ -87,6 +99,18 @@ public class ConnectorsConfig {
         .logger(new Slf4jLogger(TaskConnector.class))
         .logLevel(Logger.Level.FULL)
         .target(TaskConnector.class, urlDomainTaskConnector, new TaskConnector() {
+          @NotNull
+          @Override
+          public List<TaskDtoResponse> getAllByBotIdAndState(long botId, @NotNull String state) {
+            return new ArrayList<>();
+          }
+
+          @NotNull
+          @Override
+          public List<TaskDtoResponse> getAllByBotIdAndDate(long botId, @NotNull String date) {
+            return new ArrayList<>();
+          }
+
           @NotNull
           @Override
           public List<TaskDtoResponse> getTasksOnTomorrowByBotId(long botId) {

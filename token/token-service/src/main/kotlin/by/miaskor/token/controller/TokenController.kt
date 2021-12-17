@@ -19,7 +19,7 @@ class TokenController(
 ) {
   @PostMapping("/create/token")
   fun createToken(@RequestBody clientAuthDtoRequest: ClientAuthDtoRequest): ResponseEntity<Map<String, String>> {
-    val client = clientConnector.getClientByLoginAndPassword(
+    val client = clientConnector.getByLoginAndPassword(
       clientAuthDtoRequest.login,
       clientAuthDtoRequest.password
     )

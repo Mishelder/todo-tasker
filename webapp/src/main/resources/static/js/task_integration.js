@@ -40,7 +40,7 @@ async function saveTask(date, taskName, taskState) {
 function deleteTask(id) {
   fetch(`${URN_TO_TASKS}/${id}`, {
     method: 'DELETE'
-  }).then();
+  }).then(response => response.json());
 }
 
 function updateTask(id, taskState = null, taskName = null, date = null) {
@@ -56,5 +56,5 @@ function updateTask(id, taskState = null, taskName = null, date = null) {
           'taskState': taskState,
           'date': date
         }),
-  }).then();
+  }).then(response => response.json());
 }

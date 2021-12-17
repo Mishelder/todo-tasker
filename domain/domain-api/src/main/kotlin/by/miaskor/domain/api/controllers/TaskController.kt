@@ -4,6 +4,7 @@ import by.miaskor.domain.api.exceptions.BadRequestException
 import by.miaskor.domain.api.exceptions.NotFoundException
 import by.miaskor.domain.dto.TaskDtoRequest
 import by.miaskor.domain.dto.TaskDtoResponse
+import by.miaskor.domain.dto.TaskState
 import by.miaskor.domain.factories.TaskDtoResponseFactory
 import by.miaskor.domain.store.entities.TaskEntity
 import by.miaskor.domain.store.repositories.ClientRepository
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
+import java.util.*
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +35,10 @@ open class TaskController(
   fun getAllByBotIdAndState(@PathVariable botId: Long, @PathVariable state: String): ResponseEntity<List<TaskDtoResponse>> {
     val clientEntity = clientRepository.findByBotId(botId)
       .orElseThrow { NotFoundException("Client with bot id $botId not exists or not used") }
-    val listTasks = taskRepository.findByClientIdAndTaskState(clientEntity.id, state)
+    val listTasks = taskRepository.findByClientIdAndTaskState(
+      clientEntity.id,
+      TaskState.valueOf(state.uppercase(Locale.getDefault()))
+    )
     return ResponseEntity.ok(
       listTasks.map { taskDtoResponseFactory.makeTaskDtoResponse(it) }.toList()
     )

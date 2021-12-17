@@ -4,5 +4,4 @@ data class ClientDtoResponse(
   val id: Int = 0,
   val login: String = "",
   val email: String = "",
-  val password: String = ""
 )

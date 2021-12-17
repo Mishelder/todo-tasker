@@ -12,7 +12,6 @@ class ClientDtoResponseFactory {
       id = clientEntity.id,
       email = clientEntity.email,
       login = clientEntity.login,
-      password = clientEntity.password
     )
   }
 }

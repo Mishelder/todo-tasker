@@ -10,7 +10,7 @@ class UserDetailsService(
 ) : UserDetailsService {
 
   override fun loadUserByUsername(login: String): UserDetails {
-    val client = clientConnector.getClientByLogin(login)
+    val client = clientConnector.getByLogin(login)
     return userFactory.create(client)
   }
 }
