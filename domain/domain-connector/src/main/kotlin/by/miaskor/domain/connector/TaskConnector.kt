@@ -39,4 +39,10 @@ interface TaskConnector {
 
   @RequestLine("GET /tomorrow/{bot_id}")
   fun getTasksOnTomorrowByBotId(@Param("bot_id") botId: Long): List<TaskDtoResponse>
+
+  @RequestLine("GET /day/{bot_id}/{date}")
+  fun getAllByBotIdAndDate(@Param("bot_id") botId: Long, @Param date: String): List<TaskDtoResponse>
+
+  @RequestLine("GET /state/{bot_id}/{state}")
+  fun getAllByBotIdAndState(@Param("bot_id") botId: Long, @Param state: String): List<TaskDtoResponse>
 }
