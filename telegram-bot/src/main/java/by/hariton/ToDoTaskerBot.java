@@ -55,6 +55,7 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
     private void handleMessage(Message message) throws TelegramApiException {
         if (message.hasText()) {
             Long botId = message.getChatId();
+            List<TaskDtoResponse> taskList;
             if (message.hasEntities()) {
                 Optional<MessageEntity> commandEntity = message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
                 if (commandEntity.isPresent()) {
@@ -65,14 +66,18 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                                 botId.toString()).build());
                             break;
                         case "/today":
-                            List<TaskDtoResponse> taskList = taskConnector.getTasksOnCurrentDayByBotId(botId);
+                            taskList = taskConnector.getTasksOnCurrentDayByBotId(botId);
                             for (TaskDtoResponse task : taskList) {
                                 execute(
                                     SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
                             }
                             break;
                         case "/tomorrow":
-                            execute(SendMessage.builder().text(" tomorrow").chatId(botId.toString()).build());
+                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            for (TaskDtoResponse task : taskList) {
+                                execute(
+                                        SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                            }
                             break;
                         case "/Failed":
                             execute(SendMessage.builder().text(" failed").chatId(botId.toString()).build());

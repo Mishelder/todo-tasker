@@ -39,6 +39,16 @@ open class TaskController(
     )
   }
 
+  @GetMapping(GET_TASKS_ON_TOMORROW_BY_BOT_ID)
+  fun getTasksOnTomorrowByBotId(@PathVariable botId: Long): ResponseEntity<List<TaskDtoResponse>> {
+    val clientEntity = clientRepository.findByBotId(botId)
+      .orElseThrow { NotFoundException("Client with bot id $botId not exists or not used") }
+    val listTasks = taskRepository.findByDateAndClientId(LocalDate.now().plusDays(1), clientEntity.id)
+    return ResponseEntity.ok(
+      listTasks.map { taskDtoResponseFactory.makeTaskDtoResponse(it) }.toList()
+    )
+  }
+
   @PostMapping(CREATE_TASK)
   fun create(@RequestBody taskDtoRequest: TaskDtoRequest): ResponseEntity<TaskDtoResponse> {
     if (taskDtoRequest.taskName.trim().isEmpty()) {
@@ -153,5 +163,6 @@ open class TaskController(
     private const val GET_ALL_BY_CLIENT_ID_AND_DATE = "/tasks/date"
     private const val GET_ALL_BY_CLIENT_ID = "/tasks/all"
     private const val GET_TASKS_ON_CURRENT_DAY_BY_BOT_ID = "/tasks/currentDay/{botId}"
+    private const val GET_TASKS_ON_TOMORROW_BY_BOT_ID = "/tasks/tomorrow/{botId}"
   }
 }
