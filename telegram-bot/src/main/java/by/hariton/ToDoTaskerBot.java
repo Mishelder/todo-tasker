@@ -62,41 +62,114 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                     String command = message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
                     switch (command) {
                         case "/start":
-                            execute(SendMessage.builder().text("Ваш уникальный id - " + botId.toString()).chatId(
+                            execute(SendMessage.builder().text("Ваш уникальный id - " + botId.toString() +
+                                    ".\nВведите его на сайте, в разделе Profile -> BotId.\nТак же вы можете " +
+                                    "пользоваться нашими командами или писать любую дату,в формате 2021-01-01," +
+                                    " чтобы узнать ваши таски на этот день.").chatId(
                                 botId.toString()).build());
                             break;
                         case "/today":
                             taskList = taskConnector.getTasksOnCurrentDayByBotId(botId);
-                            for (TaskDtoResponse task : taskList) {
+                            if (taskList.isEmpty()){
                                 execute(
-                                    SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                        SendMessage.builder().text("Извините, задач на сегодня нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи на сегодня:\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
                             }
                             break;
                         case "/tomorrow":
                             taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
-                            for (TaskDtoResponse task : taskList) {
+                            if (taskList.isEmpty()){
                                 execute(
-                                        SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                        SendMessage.builder().text("Извините, задач на завтра нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи на завтра:\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
                             }
                             break;
-                        case "/Failed":
-                            execute(SendMessage.builder().text(" failed").chatId(botId.toString()).build());
+                        case "/failed":
+                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            if (taskList.isEmpty()){
+                                execute(
+                                        SendMessage.builder().text("Извините, задач о статусом \"failed\" нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи о статусом \"failed\":\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
+                            }
                             break;
-                        case "/UPCOMING":
-                            execute(SendMessage.builder().text(" upc").chatId(botId.toString()).build());
+                        case "/upcoming":
+
+                            taskList = taskConnector.getAllByBotIdAndState(botId,message.getText().substring(1));
+                            if (taskList.isEmpty()){
+                                execute(
+                                        SendMessage.builder().text("Извините, задач cо статусом \"upcoming\" нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи cо статусом \"upcoming\":\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
+                            }
                             break;
-                        case "/COMPLETED":
-                            execute(SendMessage.builder().text(" comp").chatId(botId.toString()).build());
+                        case "/completed":
+                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            if (taskList.isEmpty()){
+                                execute(
+                                        SendMessage.builder().text("Извините, задач cо статусом \"completed\" нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи cо статусом \"completed\":\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
+                            }
                             break;
-                        case "/IN_PROCESS":
-                            execute(SendMessage.builder().text(" in").chatId(botId.toString()).build());
+                        case "/in_process":
+                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            if (taskList.isEmpty()){
+                                execute(
+                                        SendMessage.builder().text("Извините, задач cо статусом \"in_process\" нет").chatId(botId.toString()).build());
+                            }else {
+                                execute(
+                                        SendMessage.builder().text("Задачи cо статусом \"in_process\":\n").chatId(botId.toString()).build());
+                                for (TaskDtoResponse task : taskList) {
+                                    execute(
+                                            SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                                }
+                            }
                             break;
                     }
                 }
             } else {
                 try {
-                    LocalDate.parse(message.getText());
-                    execute(SendMessage.builder().text("2021-01-01").chatId(botId.toString()).build());
+                    taskList = taskConnector.getAllByBotIdAndDate(botId,message.getText());
+                    if (taskList.isEmpty()){
+                        execute(
+                                SendMessage.builder().text("Извините, задач на " + message.getText() + " нет")
+                                        .chatId(botId.toString()).build());
+                    }else {
+                        execute(
+                                SendMessage.builder().text("Задачи на " + message.getText() + ":\n").chatId(botId.toString()).build());
+                        for (TaskDtoResponse task : taskList) {
+                            execute(
+                                    SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
+                        }
+                    }
                 } catch (DateTimeParseException ex) {
                     execute(
                         SendMessage.builder().text("Введите дату в правильном формате. \n Например: 2021-01-01").chatId(
