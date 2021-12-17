@@ -87,8 +87,7 @@ function createAlternationDiv(taskDiv, state) {
           }
         }
         const toDoDay = taskDiv.parentElement.parentElement;
-        updateTask(taskDiv.id, input.value,
-            input.classList.contains('is_done'), toDoDay.id);
+        updateTask(taskDiv.id, "UPCOMING", input.value, toDoDay.id);
       }
     }
   });
@@ -123,7 +122,7 @@ function createDivForTask(date) {
       task.inputElement.onblur = () => {
       };
       task.inputElement.disabled = true;
-      saveTask(date, task.inputElement.value, taskDiv.divElement)
+      saveTask(date, task.inputElement.value, "UPCOMING")
 
       task.inputElement.removeEventListener('keydown',
           saveWhenPressEnter);

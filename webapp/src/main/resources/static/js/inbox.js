@@ -54,10 +54,13 @@ function createDivForExistTask(state, item) {
       taskValueDiv = new Div('', 'value_task'),
       task = new InputElement('text', '', item['taskName'], '', '', false,
           '');
+  taskValueDiv
   taskDiv.renderAppend(tasksDiv);
   if (item['taskName'].length > MIN_LENGTH_FOR_TEXT_AREA) {
     isMatchedValueForTextArea(task.inputElement.value, taskDiv.divElement);
   }
+  addDroppable(tasksDiv);
+  addDraggable(taskValueDiv.divElement);
   taskValueDiv.renderAppend(taskDiv.divElement);
   task.renderAppend(taskValueDiv.divElement);
   task.inputElement.disabled = true;

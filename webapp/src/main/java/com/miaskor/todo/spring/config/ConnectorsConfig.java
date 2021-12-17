@@ -54,7 +54,7 @@ public class ConnectorsConfig {
         .target(ClientConnector.class, urlDomainClientConnector, new ClientConnector() {
           @NotNull
           @Override
-          public ClientDtoResponse getClientByBotId(int botId) {
+          public ClientDtoResponse getClientByBotId(long botId) {
             return new ClientDtoResponse();
           }
 
@@ -89,7 +89,7 @@ public class ConnectorsConfig {
         .target(TaskConnector.class, urlDomainTaskConnector, new TaskConnector() {
           @NotNull
           @Override
-          public List<TaskDtoResponse> getTasksOnCurrentDayByBotId(int botId) {
+          public List<TaskDtoResponse> getTasksOnCurrentDayByBotId(long botId) {
             return new ArrayList<>();
           }
 
