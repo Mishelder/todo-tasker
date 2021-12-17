@@ -14,6 +14,6 @@ data class ClientEntity(
   val id: Int = -1,
   val email: String = "",
   val login: String = "",
-  val botId: Int = -1,
+  val botId: Long = -1,
   val password: String = ""
 )
