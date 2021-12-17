@@ -1,6 +1,5 @@
 package by.hariton;
 
-import by.miaskor.domain.connector.ClientConnector;
 import by.miaskor.domain.connector.TaskConnector;
 import by.miaskor.domain.dto.TaskDtoResponse;
 import java.time.LocalDate;
@@ -19,12 +18,10 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class ToDoTaskerBot extends TelegramLongPollingBot {
 
-    private final ClientConnector clientConnector;
     private final TaskConnector taskConnector;
 
     protected ToDoTaskerBot(DefaultBotOptions options) {
         super(options);
-        clientConnector = new ConnectorsConfig().clientConnector();
         taskConnector = new ConnectorsConfig().taskConnector();
     }
 
@@ -63,7 +60,8 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                     switch (command) {
                         case "/start":
                             execute(SendMessage.builder().text("Ваш уникальный id - " + botId.toString() +
-                                    ".\nВведите его на сайте, в разделе Profile -> BotId.\nТак же вы можете " +
+                                    ".\nЧтобы бот реагировал на ваши сообщения, введите его на сайте, в " +
+                                    "разделе Profile -> BotId.\nТак же вы можете " +
                                     "пользоваться нашими командами или писать любую дату,в формате 2021-01-01," +
                                     " чтобы узнать ваши таски на этот день.").chatId(
                                 botId.toString()).build());
@@ -97,13 +95,13 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                             }
                             break;
                         case "/failed":
-                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            taskList = taskConnector.getAllByBotIdAndState(botId,message.getText().substring(1));
                             if (taskList.isEmpty()){
                                 execute(
-                                        SendMessage.builder().text("Извините, задач о статусом \"failed\" нет").chatId(botId.toString()).build());
+                                        SendMessage.builder().text("Извините, задач cо статусом \"failed\" нет").chatId(botId.toString()).build());
                             }else {
                                 execute(
-                                        SendMessage.builder().text("Задачи о статусом \"failed\":\n").chatId(botId.toString()).build());
+                                        SendMessage.builder().text("Задачи cо статусом \"failed\":\n").chatId(botId.toString()).build());
                                 for (TaskDtoResponse task : taskList) {
                                     execute(
                                             SendMessage.builder().text(task.getTaskName()).chatId(botId.toString()).build());
@@ -126,7 +124,7 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                             }
                             break;
                         case "/completed":
-                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            taskList = taskConnector.getAllByBotIdAndState(botId,message.getText().substring(1));
                             if (taskList.isEmpty()){
                                 execute(
                                         SendMessage.builder().text("Извините, задач cо статусом \"completed\" нет").chatId(botId.toString()).build());
@@ -140,7 +138,7 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                             }
                             break;
                         case "/in_process":
-                            taskList = taskConnector.getTasksOnTomorrowByBotId(botId);
+                            taskList = taskConnector.getAllByBotIdAndState(botId,message.getText().substring(1));
                             if (taskList.isEmpty()){
                                 execute(
                                         SendMessage.builder().text("Извините, задач cо статусом \"in_process\" нет").chatId(botId.toString()).build());
@@ -157,6 +155,7 @@ public class ToDoTaskerBot extends TelegramLongPollingBot {
                 }
             } else {
                 try {
+                    LocalDate.parse(message.getText());
                     taskList = taskConnector.getAllByBotIdAndDate(botId,message.getText());
                     if (taskList.isEmpty()){
                         execute(
