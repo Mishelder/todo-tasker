@@ -1,15 +1,16 @@
 package by.miaskor.report
 
-import by.miaskor.generator.ExcelGenerator
 import by.miaskor.report.ReportType.PERSONAL_ACCOUNT
 import by.miaskor.style.StyleCreator
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import by.miaskor.style.sheet.SheetAdjuster
 
 class PersonalAccountReport(
-  private val excelGenerator: ExcelGenerator,
   private val styleCreator: StyleCreator,
-  private val workbook: XSSFWorkbook
-) : Report(excelGenerator, styleCreator, workbook) {
+  private val sheetAdjuster: SheetAdjuster
+) : Report(
+  styleCreator = styleCreator,
+  sheetAdjuster = sheetAdjuster
+) {
 
   override fun typeReport(): ReportType {
     return PERSONAL_ACCOUNT
@@ -19,15 +20,19 @@ class PersonalAccountReport(
     return PERSONAL_ACCOUNT.sheetName
   }
 
-  override fun headers() = listOf(
-    "Счет первого порядка ",
-    "Счет второго порядка",
-    "Валюта, руб.",
-    "Собственные операции",
-    "Произвольный сегмент",
-    "Пример лицевого счета",
-    "Наименование",
-    "Примечание"
+  override fun headers() = mapOf(
+    Pair(
+      0, listOf(
+        "Счет первого порядка ",
+        "Счет второго порядка",
+        "Валюта, руб.",
+        "Собственные операции",
+        "Произвольный сегмент",
+        "Пример лицевого счета",
+        "Наименование",
+        "Примечание"
+      )
+    )
   )
 
   override fun cellValues() = mapOf(

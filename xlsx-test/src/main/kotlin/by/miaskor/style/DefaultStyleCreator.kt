@@ -7,21 +7,12 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 class DefaultStyleCreator : StyleCreator {
-  override fun headerStyle(workbook: XSSFWorkbook): XSSFCellStyle {
+  override fun createStyle(workbook: XSSFWorkbook): XSSFCellStyle {
     return workbook.createCellStyle().apply {
       alignment = HorizontalAlignment.CENTER
       verticalAlignment = VerticalAlignment.CENTER
       wrapText = true
       setFont(FontBuilder().createFont(workbook).fontSize(14).fontName("Times New Roman").bold(true).build())
-    }
-  }
-
-  override fun valueStyle(workbook: XSSFWorkbook): XSSFCellStyle {
-    return workbook.createCellStyle().apply {
-      alignment = HorizontalAlignment.CENTER
-      verticalAlignment = VerticalAlignment.CENTER
-      wrapText = true
-      setFont(FontBuilder().createFont(workbook).fontSize(14).fontName("Times New Roman").build())
     }
   }
 }
